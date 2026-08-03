@@ -1,0 +1,18 @@
+status: active
+priority: P3
+progress: 5
+kind: apps
+cran_state: n/a
+next: Pick the first app to prototype (see mediationverse SPEC-shiny-apps-location-2026-08-03.md open questions), scaffold apps/<name>/ with app.R + renv.lock, wire deploy.yml to Connect Cloud.
+done: 2026-08-03 — repo created, structure scaffolded (apps/, .github/workflows/, CLAUDE.md) per SPEC-shiny-apps-location-2026-08-03.md.
+type: apps
+last_updated: 2026-08-03
+
+## mediation-apps
+
+Sibling repo to the mediationverse package ecosystem, holding standalone
+Shiny apps deployed to Posit Connect Cloud. No apps built yet — this is
+the initial structural scaffold.
+
+See CLAUDE.md for conventions; see mediationverse's
+SPEC-shiny-apps-location-2026-08-03.md for the full design record.
