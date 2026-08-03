@@ -55,8 +55,14 @@ When an app escalates to a golem package:
 
 ## Workflow
 
-Single-integration: `main ← feature/*`. No `dev` branch. PRs required on
-`main` (branch protection).
+Multi-branch (craft-style): `main ← dev ← feature/*` (revised 2026-08-03
+from the originally-planned single-integration pattern — see SPEC
+addendum). `main` is PR-only with branch protection (0 required
+reviewers, no force-push, no deletions). `dev` is the integration branch —
+commits/pushes allowed directly, existing-file edits allowed, new files
+should go through a `feature/*` branch once the repo has real app code.
+`dev` is intentionally **not** GitHub-protected, matching the rest of the
+mediation ecosystem's craft-style repos.
 
 ## Design history
 
