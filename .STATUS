@@ -1,18 +1,18 @@
 status: active
 priority: P3
-progress: 5
+progress: 25
 kind: apps
 cran_state: n/a
-next: Pick the first app to prototype (see mediationverse SPEC-shiny-apps-location-2026-08-03.md open questions), scaffold apps/<name>/ with app.R + renv.lock, wire deploy.yml to Connect Cloud.
-done: 2026-08-03 — repo created, structure scaffolded (apps/, .github/workflows/, CLAUDE.md) per SPEC-shiny-apps-location-2026-08-03.md.
+next: Merge feature/medci-app to dev, PR dev->main, wire CONNECT_API_KEY/CONNECT_SERVER secrets, first live deploy of medci. MEDMC migration blocked — RMediation::ci() API broke (old app called ci(M,S,QU,A) with raw numeric vectors; current ci() is an S7 generic on a fitted object) — needs its own investigation, not a straight port.
+done: 2026-08-03 — repo scaffolded. medci app migrated from amplab.shinyapps.io/MEDCI (id 60898): original 2013 ui.R/server.R verified working as-is against current CRAN RMediation 1.6.1 (medci(type="all") unchanged), renv.lock pinned, legacy bundle files preserved for provenance. medmc migration (amplab.shinyapps.io/MEDMC, id 84078) parked — API break found in RMediation::ci().
 type: apps
 last_updated: 2026-08-03
 
 ## mediation-apps
 
 Sibling repo to the mediationverse package ecosystem, holding standalone
-Shiny apps deployed to Posit Connect Cloud. No apps built yet — this is
-the initial structural scaffold.
+Shiny apps deployed to Posit Connect Cloud. First app (medci) migrated
+from the legacy amplab shinyapps.io account and verified working.
 
 See CLAUDE.md for conventions; see mediationverse's
 SPEC-shiny-apps-location-2026-08-03.md for the full design record.
