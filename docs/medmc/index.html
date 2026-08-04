@@ -65,13 +65,16 @@
   .mc-example .result { color: #5b4b8a; font-weight: 700; }
 
   .mc-shot {
-    border: 1px dashed #c9c1ae;
+    border: 1px solid #e1d9c8;
     border-radius: 12px;
-    padding: 32px;
-    text-align: center;
-    color: #94897a;
-    font-size: 0.85rem;
+    padding: 8px;
     margin-bottom: 16px;
+    background: #ffffff;
+  }
+  .mc-shot img {
+    display: block;
+    width: 100%;
+    border-radius: 8px;
   }
 
   details.mc-card summary {
@@ -125,7 +128,9 @@
       </div>
     </div>
 
-    <div class="mc-shot">App screenshot — coming soon</div>
+    <div class="mc-shot">
+      <img src="img/screenshot.png" alt="Monte Carlo app screenshot: coefficient and variance-covariance matrix inputs, formula field, the resulting Monte Carlo / Asymptotic-Delta confidence intervals, and the density plot with both CI bars.">
+    </div>
 
     <details class="mc-card">
       <summary>Citation</summary>

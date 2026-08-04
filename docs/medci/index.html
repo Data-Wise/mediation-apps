@@ -65,13 +65,16 @@
   .mc-example .result { color: #2e6f63; font-weight: 700; }
 
   .mc-shot {
-    border: 1px dashed #c9c1ae;
+    border: 1px solid #e1d9c8;
     border-radius: 12px;
-    padding: 32px;
-    text-align: center;
-    color: #94897a;
-    font-size: 0.85rem;
+    padding: 8px;
     margin-bottom: 16px;
+    background: #ffffff;
+  }
+  .mc-shot img {
+    display: block;
+    width: 100%;
+    border-radius: 8px;
   }
 
   details.mc-card summary {
@@ -123,7 +126,9 @@
       </div>
     </div>
 
-    <div class="mc-shot">App screenshot — coming soon</div>
+    <div class="mc-shot">
+      <img src="img/screenshot.png" alt="MEDCI app screenshot: inputs for a, b coefficients and their standard errors, the resulting confidence interval, and the density plot with a bolded CI marker.">
+    </div>
 
     <details class="mc-card">
       <summary>Citation</summary>
