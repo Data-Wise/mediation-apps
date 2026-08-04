@@ -146,7 +146,10 @@ fluidPage(
           #landed where intended before running the computation.
           fluidRow(
             column(6, tableOutput("covmat")),
-            column(6, uiOutput("covmatSwatch"))
+            column(6,
+              checkboxInput("showSwatch", "Show color grid", value = FALSE),
+              uiOutput("covmatSwatch")
+            )
           ),
 
           textInput("quant", "Formula:", "b1*b2*b3*b4"),

@@ -114,9 +114,19 @@ shinyServer(function(input, output, session) {
     data.frame(Coefficient = names(parseMu()), Estimate = as.numeric(parseMu()))
   }, digits = 4, rownames = FALSE)
 
+  #Only the lower triangle + diagonal are ever entered by the user
+  #(vechReverse() mirrors them into the upper triangle purely so the matrix
+  #is usable in mvrnorm()/matrix algebra downstream) -- showing the mirrored
+  #upper-triangle values back to the user is redundant and reads as
+  #"extra zeros" they never typed. Blank them in the display copy only;
+  #parseSigma()'s return value (used for the actual computation) is
+  #untouched.
   output$covmat <- renderTable({
-    as.data.frame(parseSigma())
-  }, digits = 4, rownames = TRUE)
+    Sigma <- parseSigma()
+    display <- as.data.frame(Sigma)
+    display[upper.tri(Sigma)] <- NA
+    display
+  }, digits = 4, rownames = TRUE, na = "")
 
   #Live PSD check for the matrix sanity-check swatch below -- additive only,
   #does not touch parseSigma()'s own validate() calls or rawResults()'s
@@ -148,6 +158,11 @@ shinyServer(function(input, output, session) {
   #illegible. Capped at n<=6 coefficients; beyond that a 49+-cell grid
   #wouldn't stay legible next to the table, so it falls back to a note.
   output$covmatSwatch <- renderUI({
+    #Opt-in (checkbox default off) -- the color grid duplicates information
+    #already in the numeric table above and wasn't worth showing by default;
+    #still available for anyone who does want the visual scan.
+    req(input$showSwatch)
+
     Sigma <- parseSigma()
     n <- nrow(Sigma)
 
