@@ -211,8 +211,12 @@ shinyServer(function(input, output, session) {
     Sigma <- parseSigma()
     n <- length(M)
 
-    validate(need(input$alpha > .0001 && input$alpha < .9999,
-                  "Significance Level must be between .0001 and .9999"))
+    #alpha comes from a selectizeInput (presets + free typing), so it
+    #arrives as character -- parse before use. Bounds are the open
+    #interval (0, 1) exclusive, matching what the presets themselves span.
+    alpha_val <- suppressWarnings(as.numeric(input$alpha))
+    validate(need(!is.na(alpha_val) && alpha_val > 0 && alpha_val < 1,
+                  "Significance Level must be a number between 0 and 1 (exclusive)."))
 
     parsed <- validateFormula(input$quant, n)
     validate(need(is.list(parsed), if (is.list(parsed)) "" else parsed))
@@ -249,7 +253,7 @@ shinyServer(function(input, output, session) {
 
     point_est_mc <- mean(values)
     se_mc <- sd(values)
-    ci_mc <- stats::quantile(values, c(input$alpha / 2, 1 - input$alpha / 2))
+    ci_mc <- stats::quantile(values, c(alpha_val / 2, 1 - alpha_val / 2))
 
     #--- Asymptotic-Delta method ---
     #Symbolic differentiation via stats::deriv() -- not numeric
@@ -272,11 +276,18 @@ shinyServer(function(input, output, session) {
                   "The asymptotic-delta method isn't well-defined at these values -- try different coefficient estimates."))
 
     point_est_delta <- eval(expr, envir = as.list(M))
-    q <- stats::qnorm(1 - input$alpha / 2)
+    q <- stats::qnorm(1 - alpha_val / 2)
     ci_delta <- point_est_delta + c(-1, 1) * q * se_delta
 
+    #alpha_val is carried in the return list (not read from input$alpha
+    #again downstream) for the same reason expr_text is: output$interval
+    #depends on results() (debounced) -- if it also read input$alpha
+    #directly it would pick up a second, undebounced dependency and
+    #reintroduce the class of bug documented in medci's drawPlot() history
+    #(PR #27) and noted in the Part 1 swatch comments above.
     list(
       expr_text = input$quant,
+      alpha = alpha_val,
       mc = list(estimate = point_est_mc, se = se_mc, ci = ci_mc, draws = values),
       delta = list(estimate = point_est_delta, se = se_delta, ci = ci_delta)
     )
@@ -292,10 +303,10 @@ shinyServer(function(input, output, session) {
   output$interval <- renderText({
     r <- results()
     paste0(
-      "For ", r$expr_text, ", the point estimate and ", round((1 - input$alpha) * 100, digits = 3),
+      "For ", r$expr_text, ", the point estimate and ", round((1 - r$alpha) * 100, digits = 3),
       "% Monte Carlo CI are ", round(r$mc$estimate, digits = 3), " (SE = ", round(r$mc$se, digits = 3),
       ") and [", round(r$mc$ci[[1]], digits = 3), ", ", round(r$mc$ci[[2]], digits = 3), "], respectively. ",
-      "The point estimate and ", round((1 - input$alpha) * 100, digits = 3), "% Asymptotic-Delta CI are ",
+      "The point estimate and ", round((1 - r$alpha) * 100, digits = 3), "% Asymptotic-Delta CI are ",
       round(r$delta$estimate, digits = 3), " (SE = ", round(r$delta$se, digits = 3), ") and [",
       round(r$delta$ci[[1]], digits = 3), ", ", round(r$delta$ci[[2]], digits = 3), "], respectively."
     )

@@ -94,19 +94,6 @@ fluidPage(
       outline: 2px solid #b3261e;
       outline-offset: 2px;
     }
-    /* Significance Level is typed directly (e.g. .05, .01) -- the
-       increment/decrement spinner arrows invite clicking through tiny
-       0.001-ish steps to a specific value, which isn't how this field is
-       actually used. Hide them; typing still works normally. */
-    #alpha::-webkit-outer-spin-button,
-    #alpha::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    #alpha[type='number'] {
-      -moz-appearance: textfield;
-    }
-
     .mc-swatch-warning {
       color: #b3261e;
       font-size: 0.8rem;
@@ -155,7 +142,16 @@ fluidPage(
           textInput("quant", "Formula:", "b1*b2*b3*b4"),
           helpText("References the coefficients as b1, b2, ... Allowed: + - * / ^ ( ) and log()."),
 
-          numericInput("alpha", "Significance Level:", 0.05)
+          #Common presets, but still freely typeable (create = TRUE) --
+          #server.R validates whatever is typed is a number in (0, 1)
+          #exclusive, same bounds as the preset list itself spans.
+          selectizeInput(
+            "alpha", "Significance Level:",
+            choices = c("0.0001", "0.005", "0.01", "0.05", "0.1"),
+            selected = "0.05",
+            options = list(create = TRUE, createOnBlur = TRUE)
+          ),
+          helpText("Pick a common value or type your own (any number between 0 and 1, exclusive).")
         ),
 
         #Zone 2: Result.
