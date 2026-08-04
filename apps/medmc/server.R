@@ -109,7 +109,7 @@ shinyServer(function(input, output, session) {
     Sigma
   })
 
-  #Submitted-values sanity tables (footer strip, collapsed by default).
+  #Submitted-values sanity table (footer strip, collapsed by default).
   output$invals <- renderTable({
     data.frame(Coefficient = names(parseMu()), Estimate = as.numeric(parseMu()))
   }, digits = 4, rownames = FALSE)
@@ -117,6 +117,76 @@ shinyServer(function(input, output, session) {
   output$covmat <- renderTable({
     as.data.frame(parseSigma())
   }, digits = 4, rownames = TRUE)
+
+  #Live PSD check for the matrix sanity-check swatch below -- additive only,
+  #does not touch parseSigma()'s own validate() calls or rawResults()'s
+  #downstream error text. Tolerance is scaled to the matrix's own magnitude
+  #(not a bare absolute cutoff) since Sigma's entries are user-typed and
+  #unbounded -- an absolute tolerance would be wrong at both extremes (false
+  #negatives on large-magnitude near-singular matrices, false positives from
+  #float noise on tiny entries).
+  covmatPSD <- reactive({
+    Sigma <- parseSigma()
+    ev <- eigen(Sigma, symmetric = TRUE, only.values = TRUE)$values
+    tol <- 1e-8 * max(abs(ev))
+    min(ev) > -tol
+  })
+
+  #Live matrix sanity-check swatch, next to the Sigma input in Zone 1 (not
+  #the footer). A CSS grid via renderUI(), not an image()-based renderPlot()
+  #-- this output is deliberately NOT debounced (recomputes on every
+  #keystroke, same as parseSigma()/output$covmat above), and a renderPlot()
+  #graphics-device round trip on every keystroke would be a real lag/flicker
+  #risk on Connect Cloud's shared compute (see the n.mc comment above for the
+  #same constraint). Built only on parseSigma() -- never on rawResults() or
+  #the debounced results() -- so this can't reintroduce the class of bug
+  #documented in medci's drawPlot() comment (a plot reading input$... AND a
+  #debounced reactive at once).
+  #
+  #Color-only (no numeric overlay): the numbers are already in the adjacent
+  #table at digits=4 precision -- text at swatch-cell size would be
+  #illegible. Capped at n<=6 coefficients; beyond that a 49+-cell grid
+  #wouldn't stay legible next to the table, so it falls back to a note.
+  output$covmatSwatch <- renderUI({
+    Sigma <- parseSigma()
+    n <- nrow(Sigma)
+
+    if (n > 6) {
+      return(helpText("Matrix too large to show as a color grid (more than 6 coefficients) -- see the table."))
+    }
+
+    psd_ok <- covmatPSD()
+    maxAbs <- max(abs(Sigma))
+    pos_ramp <- grDevices::colorRamp(c("#ffffff", "#2e6f63"))
+    neg_ramp <- grDevices::colorRamp(c("#ffffff", "#f6efe1"))
+
+    rows <- lapply(seq_len(n), function(i) {
+      cells <- lapply(seq_len(n), function(j) {
+        v <- Sigma[i, j]
+        intensity <- if (maxAbs > 0) abs(v) / maxAbs else 0
+        ramp <- if (v >= 0) pos_ramp else neg_ramp
+        bg <- grDevices::rgb(ramp(intensity), maxColorValue = 255)
+        tags$div(
+          title = round(v, 4),
+          style = sprintf(
+            "width: 26px; height: 26px; background-color: %s; border: 1px solid #e1d9c8;",
+            bg
+          )
+        )
+      })
+      tags$div(style = "display: flex;", cells)
+    })
+
+    tagList(
+      div(
+        class = if (psd_ok) "mc-swatch-grid" else "mc-swatch-grid mc-swatch-invalid",
+        rows
+      ),
+      if (!psd_ok) {
+        div(class = "mc-swatch-warning", icon("triangle-exclamation"), " Not positive-semi-definite")
+      }
+    )
+  })
 
   #Core computation: Monte Carlo + Asymptotic-Delta CIs for the user's
   #formula. validate()/need() throughout render Shiny's standard

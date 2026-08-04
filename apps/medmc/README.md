@@ -7,6 +7,9 @@ effects).
 
 Migrated from `amplab.shinyapps.io/MEDMC` (`server.R` dated 2/10/2014).
 
+Live on Posit Connect Cloud (connect.posit.cloud), verified working as
+of 2026-08-04.
+
 ## Status
 
 Not a straight port. The original called
@@ -36,6 +39,18 @@ against the actual 1.1.3 source:
 See `SPEC-medmc-migration-2026-08-04.md` (repo root) for the full
 design record, including the adversarial review that caught the
 point-estimate assumption before implementation.
+
+## Matrix sanity-check swatch
+
+Next to the Variance-Covariance Matrix input: a live color-coded grid
+(`output$covmatSwatch`, `renderUI` CSS grid, not a plot -- redraws
+cheaply on every keystroke) alongside the existing numeric table, both
+sourced from `parseSigma()`. Flags a non-positive-semi-definite matrix
+visually (via `eigen()`, magnitude-scaled tolerance) before it would
+otherwise only surface once `MASS::mvrnorm()` fails inside the debounced
+`results()`. Capped at 6 coefficients -- larger matrices fall back to
+the table alone. See `/Users/dt/.claude/plans/abstract-weaving-boot.md`
+for the design record (adversarially reviewed before implementation).
 
 ## Security
 
