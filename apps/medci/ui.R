@@ -75,13 +75,33 @@ fluidPage(
     mainPanel(
 
       h5("Results"),
-      htmlOutput("interval"),
+      #Fenced, monospace, copy-to-clipboard block. The copy button reads
+      #the rendered element's innerText (not the raw HTML source), so the
+      #HTML entities server.R emits (e.g. &#770;) come through as their
+      #actual rendered characters, not literal entity text.
+      div(
+        style = "position: relative;",
+        actionButton("copyResults", "Copy", icon = icon("copy"),
+                     class = "btn-sm btn-outline-secondary",
+                     style = "position: absolute; top: 6px; right: 6px; z-index: 2;",
+                     onclick = "navigator.clipboard.writeText(document.getElementById('interval').innerText); var b = document.getElementById('copyResults'); var t = b.innerHTML; b.innerHTML = 'Copied!'; setTimeout(function(){ b.innerHTML = t; }, 1200);"),
+        tags$pre(
+          style = "white-space: pre-wrap; padding: 12px 90px 12px 12px; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px;",
+          htmlOutput("interval", inline = TRUE)
+        )
+      ),
 
       h5("Density Plot and Confidence Interval"),
       #Percentage width instead of a fixed 600px so the plot doesn't
       #overflow on narrow/mobile viewports; height stays fixed since
       #plotOutput needs an absolute height.
       plotOutput("plot", width = "100%", height = "425px"),
+
+      div(
+        style = "margin-top: 6px;",
+        downloadButton("downloadPlot", "Download plot", class = "btn-sm btn-outline-secondary"),
+        helpText("Tip: right-click the plot above to copy it directly to your clipboard.")
+      ),
 
       HTML("<br>"),
       HTML("<b>NOTE:</b> When \\(\\rho=0\\) the standard error for the indirect effect is calculated using"),
