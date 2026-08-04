@@ -1,5 +1,7 @@
 # BRAINSTORM: A "front door" for the mediation-apps Shiny apps
 
+Folded into [SPEC-shiny-apps-landing-page-2026-08-04.md](SPEC-shiny-apps-landing-page-2026-08-04.md) — see that file for the concrete build plan.
+
 ## Context
 
 medci and medmc are each deployed independently to Posit Connect Cloud,
