@@ -204,3 +204,48 @@ are/aren't spellable from it) — don't just assert it.
 - Connect Cloud publish requires explicitly picking each app's
   `ui.R`/`app.R` as the primary file per app at connect-time — it is not
   an autodetection crawl of the whole repo tree.
+
+## 9. Container pages (docs/ site)
+
+Every app gets a container page at `docs/<app>/index.html`, linked from
+the `docs/index.html` menu — plain HTML/CSS, no build step, matching the
+apps' own inline-`<style>` convention. Reference implementation:
+`docs/medci/index.html`, `docs/medmc/index.html` (2026-08-04).
+
+**Template (same section order for every app):**
+
+1. Nav row — back to `docs/index.html`, forward to the sibling app.
+2. Header card — app name + one-line description, left-rail accent border
+   in the app's identity color.
+3. Formula card — the method's notation, rendered via MathJax (CDN script
+   tag with a pinned `integrity` hash — see below), reusing copy already
+   written in the app's own "About this calculator" panel. Don't
+   re-author descriptions; copy them.
+4. Worked-example card — one filled-in numeric example with a real
+   computed result, not a placeholder number. Verify the number against
+   the actual method (e.g. `RMediation::medci()` directly, or an actual
+   Monte Carlo simulation matching the app's default inputs) before
+   committing it — a fabricated-looking-plausible CI is a real risk here
+   (caught and fixed twice in this repo's history, both apps).
+5. Screenshot `<figure>` — a real capture of the live app (see
+   `reference_browser_screenshot_to_file_capture` memory for the capture
+   technique), not a mockup.
+6. Citation `<details>` (collapsed by default) — every app gets this
+   section for template symmetry even without a published citation yet;
+   show "Citation forthcoming" rather than omitting the section.
+7. Explicit Launch button — the *only* place the Connect Cloud URL
+   appears. No auto-redirect (`<meta http-equiv="refresh">`) — the whole
+   point of a container page over a redirect stub is giving the visitor
+   context before they commit to leaving the site.
+
+**Identity color:** each app's container page may use its own accent
+color, distinct from its siblings, even when the apps share a color in
+their own live Shiny UI (medci and medmc both use `#2e6f63` teal
+in-app; medmc's container page uses `#5b4b8a` instead). This is a
+deliberate, container-page-only divergence for visual distinctness
+between apps on the menu page — not a drift to reconcile.
+
+**MathJax loading:** pin a `integrity="sha384-..."` hash on the CDN
+`<script>` tag (compute via `curl <url> | openssl dgst -sha384 -binary |
+openssl base64 -A`) — a bare CDN `<script src>` with no SRI is a supply-
+chain risk a security-review pass will flag.
