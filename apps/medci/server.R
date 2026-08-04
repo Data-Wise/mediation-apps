@@ -75,7 +75,8 @@ shinyServer(function(input, output) {
           " the indirect effect estimate is ", round(mu.xy,digits=3), " (SE = ", round(se.xy,digits=3), "). The distribution of the product of coefficients method ",
           round((1-alpha)*100,digits=3),"% CI is ", "[", round(dopCI[[1]],digits=3),", ",round(dopCI[[2]],digits=3),"].",sep="")
 
-    list(text = text, mu.x = mu.x, mu.y = mu.y, se.x = se.x, se.y = se.y, rho = rho, alpha = alpha)
+    list(text = text, mu.x = mu.x, mu.y = mu.y, se.x = se.x, se.y = se.y, rho = rho, alpha = alpha,
+         mu.xy = mu.xy, dopCI = dopCI)
   })
 
   results <- debounce(rawResults, 500)
@@ -95,6 +96,19 @@ shinyServer(function(input, output) {
   drawPlot <- function() {
     r <- results()
     medci(r$mu.x, r$mu.y, r$se.x, r$se.y, r$rho, r$alpha, plot=TRUE, plotCI=TRUE)
+
+    #medci()'s own CI marker (plotCI=TRUE) is a thin black line near the
+    #baseline -- easy to miss. Overlay a bolder version in the app's own
+    #accent color (matching the Result card's #2e6f63) directly on top,
+    #without touching medci()'s internals: same CI/point-estimate values
+    #(r$dopCI, r$mu.xy, already carried through the debounced results()
+    #list -- not read from input$... directly, same rule as the rest of
+    #this function), just drawn thicker and in color for visual weight.
+    usr <- par("usr")
+    yci <- usr[3] + 0.06 * diff(usr[3:4])
+    arrows(r$dopCI[[1]], yci, r$dopCI[[2]], yci, length = 0, angle = 90, code = 3,
+           lwd = 3, col = "#2e6f63")
+    points(r$mu.xy, yci, pch = 19, cex = 1.4, col = "#2e6f63")
   }
 
   #Specify that we want the plot produced by medci to be shown in the user interface.
