@@ -1,2 +1,5 @@
 legacy
 README.md
+.Rprofile
+renv
+renv.lock
