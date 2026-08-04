@@ -8,7 +8,9 @@ Deployed to [Posit Connect Cloud](https://docs.posit.co/connect-cloud/).
 ## Live apps
 
 **[data-wise.github.io/mediation-apps](https://data-wise.github.io/mediation-apps/)**
-— branded launch cards for both apps.
+— branded launch cards for both apps, each linking to a container page
+(formula, worked example, citation) with an explicit Launch button — no
+auto-redirect.
 
 [![Launch MEDCI](https://img.shields.io/badge/%E2%96%B6-Launch%20MEDCI-2e6f63)](https://data-wise.github.io/mediation-apps/medci/)
 [![Launch Monte Carlo](https://img.shields.io/badge/%E2%96%B6-Launch%20Monte%20Carlo-2e6f63)](https://data-wise.github.io/mediation-apps/medmc/)
@@ -48,3 +50,4 @@ medci and medmc. Start here for any new app in this repo.
 - [REVIEW](https://github.com/Data-Wise/mediationverse/blob/dev/REVIEW-shiny-apps-location-2026-08-03.md)
 - [SPEC](https://github.com/Data-Wise/mediationverse/blob/dev/SPEC-shiny-apps-location-2026-08-03.md)
 - [BRAINSTORM: landing page](BRAINSTORM-shiny-apps-landing-page-2026-08-04.md) / [SPEC: landing page](SPEC-shiny-apps-landing-page-2026-08-04.md)
+- [BRAINSTORM: container pages](BRAINSTORM-container-pages-2026-08-04.md) / [SPEC: container pages](SPEC-container-pages-2026-08-04.md)
