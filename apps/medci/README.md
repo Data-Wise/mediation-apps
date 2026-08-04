@@ -41,3 +41,8 @@ auto-source them, so they have no effect on the running app.
 - Parked: interactive `plotly` density plot and bookmarkable input state
   (items #9-10 from the UI enhancement review) — both cross the golem
   escalation trigger, out of scope for the current single-file app.
+- Parked: dark-mode toggle (`bslib::input_dark_mode()`). Not a drop-in —
+  the 3-zone layout's custom CSS (`.mc-card`, `.mc-result`, `.mc-coef-a`/
+  `-b`) uses hardcoded hex colors, not theme-aware tokens, so those blocks
+  would stay light-colored while Bootstrap's own components flipped.
+  Needs a CSS-custom-properties rework first.
