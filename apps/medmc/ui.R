@@ -117,7 +117,8 @@ fluidPage(
   div(
     class = "mc-page",
 
-    titlePanel("Monte Carlo"),
+    titlePanel("Monte Carlo Confidence Intervals for Indirect Effects"),
+    helpText("Computes Monte Carlo and Asymptotic-Delta confidence intervals for an arbitrary nonlinear function of coefficient estimates — e.g. sequential indirect effects or contrasts of indirect effects in mediation models."),
 
     navset_tab(
       id = "mainTabs",
