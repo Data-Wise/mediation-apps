@@ -331,17 +331,17 @@ shinyServer(function(input, output, session) {
     r <- results()
     d <- density(r$mc$draws)
 
-    plot(d, main = "", xlab = r$expr_text, ylab = "Density", lwd = 2)
+    plot(d, main = "", xlab = r$expr_text, ylab = "Density", lwd = 2, col = "#2e6f63")
 
     #Overlay the asymptotic-normal density for comparison.
     curve(stats::dnorm(x, r$delta$estimate, r$delta$se), add = TRUE, col = "blue", lty = 2, lwd = 2)
 
-    #CI bars/points bolder and in the app's own accent color (teal for
-    #Monte Carlo, matching the Result card's #2e6f63) instead of plain
-    #black -- previously both the density curve outline and the MC bar
-    #were black, so the MC bar didn't stand out against the curve it sits
-    #under. Blue/dashed for Asymptotic-Delta stays as the second,
-    #visually distinct series.
+    #Density curve, CI bar, and point all teal (the app's accent color,
+    #matching the Result card's #2e6f63) so the "Monte Carlo" legend
+    #entry matches what's actually drawn -- previously the curve stayed
+    #black while only the CI bar changed color, so the legend swatch
+    #didn't match the curve it was labeling. Blue/dashed for
+    #Asymptotic-Delta stays as the second, visually distinct series.
     usr <- par("usr")
     yci_mc <- usr[3] + 0.05 * diff(usr[3:4])
     yci_delta <- usr[3] + 0.10 * diff(usr[3:4])
