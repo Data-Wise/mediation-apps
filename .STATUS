@@ -3,8 +3,8 @@ priority: P3
 progress: 25
 kind: apps
 cran_state: n/a
-next: Wire CONNECT_API_KEY/CONNECT_SERVER secrets on this repo, then trigger the first live deploy of medci (push to main, path-filtered CI picks it up). MEDMC migration blocked — RMediation::ci() API broke (old app called ci(M,S,QU,A) with raw numeric vectors; current ci() is an S7 generic on a fitted object) — needs its own investigation, not a straight port.
-done: 2026-08-03 — repo scaffolded; medci migrated from amplab.shinyapps.io/MEDCI (id 60898) via PR #1, review-fixed (mislabeled CI, dead MathJax, error-hiding CSS, stale email), squash-merged to dev; dev->main release PR #2 merged. medmc migration (amplab.shinyapps.io/MEDMC, id 84078) parked — API break found in RMediation::ci().
+next: Finish the Connect Cloud "Publish from GitHub" flow (browser UI) -- select Data-Wise/mediation-apps, apps/medci/ui.R as primary file. GitHub Actions deploy.yml removed (PRs #1-8): it called rsconnect::connectApiUser(apiKey=...), which only works for classic self-hosted Posit Connect -- connect.posit.cloud has no static API key at all, confirmed via rsconnect docs (connectCloudUser()/connectCloudClientCredentials() are the real auth paths for Connect Cloud). MEDMC migration still blocked separately -- RMediation::ci() API broke (old app called ci(M,S,QU,A) with raw numeric vectors; current ci() is an S7 generic on a fitted object) -- needs its own investigation, not a straight port.
+done: 2026-08-03 -- repo scaffolded; medci migrated from amplab.shinyapps.io/MEDCI (id 60898) via PR #1, review-fixed (mislabeled CI, dead MathJax, error-hiding CSS, stale email); manifest.json + .rscignore committed (PR #3/#4) for Connect Cloud's GitHub-connect flow, which reads it directly from the repo. GitHub Actions CI path (PRs #5-8) debugged through two real bugs (renv activation cwd, missing workflow_dispatch) before confirming the whole approach was wrong for this product -- removed.
 type: apps
 last_updated: 2026-08-03
 
