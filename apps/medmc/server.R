@@ -336,15 +336,21 @@ shinyServer(function(input, output, session) {
     #Overlay the asymptotic-normal density for comparison.
     curve(stats::dnorm(x, r$delta$estimate, r$delta$se), add = TRUE, col = "blue", lty = 2, lwd = 2)
 
+    #CI bars/points bolder and in the app's own accent color (teal for
+    #Monte Carlo, matching the Result card's #2e6f63) instead of plain
+    #black -- previously both the density curve outline and the MC bar
+    #were black, so the MC bar didn't stand out against the curve it sits
+    #under. Blue/dashed for Asymptotic-Delta stays as the second,
+    #visually distinct series.
     usr <- par("usr")
     yci_mc <- usr[3] + 0.05 * diff(usr[3:4])
     yci_delta <- usr[3] + 0.10 * diff(usr[3:4])
-    arrows(r$mc$ci[[1]], yci_mc, r$mc$ci[[2]], yci_mc, length = 0, angle = 90, code = 3, lwd = 2)
-    points(r$mc$estimate, yci_mc, pch = 19)
-    arrows(r$delta$ci[[1]], yci_delta, r$delta$ci[[2]], yci_delta, length = 0, angle = 90, code = 3, lwd = 2, col = "blue", lty = 2)
-    points(r$delta$estimate, yci_delta, pch = 19, col = "blue")
+    arrows(r$mc$ci[[1]], yci_mc, r$mc$ci[[2]], yci_mc, length = 0, angle = 90, code = 3, lwd = 3, col = "#2e6f63")
+    points(r$mc$estimate, yci_mc, pch = 19, cex = 1.4, col = "#2e6f63")
+    arrows(r$delta$ci[[1]], yci_delta, r$delta$ci[[2]], yci_delta, length = 0, angle = 90, code = 3, lwd = 3, col = "blue", lty = 2)
+    points(r$delta$estimate, yci_delta, pch = 19, cex = 1.4, col = "blue")
 
-    legend("topright", c("Monte Carlo", "Asymptotic-Delta"), col = c("black", "blue"), lty = c(1, 2), lwd = 2, bty = "n", cex = 0.8)
+    legend("topright", c("Monte Carlo", "Asymptotic-Delta"), col = c("#2e6f63", "blue"), lty = c(1, 2), lwd = 3, bty = "n", cex = 0.8)
   }
 
   output$plot <- renderPlot({
