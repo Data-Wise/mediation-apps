@@ -3,8 +3,8 @@ priority: P3
 progress: 25
 kind: apps
 cran_state: n/a
-next: Merge feature/medci-app to dev, PR dev->main, wire CONNECT_API_KEY/CONNECT_SERVER secrets, first live deploy of medci. MEDMC migration blocked — RMediation::ci() API broke (old app called ci(M,S,QU,A) with raw numeric vectors; current ci() is an S7 generic on a fitted object) — needs its own investigation, not a straight port.
-done: 2026-08-03 — repo scaffolded. medci app migrated from amplab.shinyapps.io/MEDCI (id 60898): original 2013 ui.R/server.R verified working as-is against current CRAN RMediation 1.6.1 (medci(type="all") unchanged), renv.lock pinned, legacy bundle files preserved for provenance. medmc migration (amplab.shinyapps.io/MEDMC, id 84078) parked — API break found in RMediation::ci().
+next: Wire CONNECT_API_KEY/CONNECT_SERVER secrets on this repo, then trigger the first live deploy of medci (push to main, path-filtered CI picks it up). MEDMC migration blocked — RMediation::ci() API broke (old app called ci(M,S,QU,A) with raw numeric vectors; current ci() is an S7 generic on a fitted object) — needs its own investigation, not a straight port.
+done: 2026-08-03 — repo scaffolded; medci migrated from amplab.shinyapps.io/MEDCI (id 60898) via PR #1, review-fixed (mislabeled CI, dead MathJax, error-hiding CSS, stale email), squash-merged to dev; dev->main release PR #2 merged. medmc migration (amplab.shinyapps.io/MEDMC, id 84078) parked — API break found in RMediation::ci().
 type: apps
 last_updated: 2026-08-03
 
