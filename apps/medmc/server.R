@@ -121,12 +121,23 @@ shinyServer(function(input, output, session) {
   #"extra zeros" they never typed. Blank them in the display copy only;
   #parseSigma()'s return value (used for the actual computation) is
   #untouched.
+  #
+  #Genuine zero covariances (a real value the user typed, not a blanked
+  #cell) are shown as a bare "0" instead of "0.0000" -- cuts visual noise
+  #from the common all-zero off-diagonal case without making a real zero
+  #indistinguishable from the blanked (never-entered) upper-triangle
+  #cells, which stay "" via na = "".
   output$covmat <- renderTable({
     Sigma <- parseSigma()
     display <- as.data.frame(Sigma)
     display[upper.tri(Sigma)] <- NA
-    display
-  }, digits = 4, rownames = TRUE, na = "")
+    fmt <- as.data.frame(lapply(display, function(col) {
+      ifelse(is.na(col), NA_character_,
+             ifelse(col == 0, "0", formatC(col, digits = 4, format = "f")))
+    }))
+    rownames(fmt) <- rownames(display)
+    fmt
+  }, rownames = TRUE, na = "")
 
   #Live PSD check for the matrix sanity-check swatch below -- additive only,
   #does not touch parseSigma()'s own validate() calls or rawResults()'s
