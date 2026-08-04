@@ -18,7 +18,18 @@ shinyServer(function(input, output) {
   #input changes (no submit button -- see ui.R). validate()/need() render
   #Shiny's standard inline-error style near the output that depends on them,
   #replacing the old four separate ...Messages textOutputs + red CSS.
-  results <- reactive({
+  #
+  #Debounced (500ms) below via `results <- debounce(rawResults, 500)`: with
+  #live reactivity and no submit button, every keystroke re-triggers this
+  #-- typing "0.1" digit-by-digit, or briefly clearing a field, hit a
+  #transient invalid/incomplete state that flashed an error before
+  #settling on the correct value. Debouncing waits until input pauses
+  #instead of recomputing on every keystroke -- same "type and see it
+  #happen" feel, without the flash. (Considered reintroducing
+  #submitButton instead -- rejected: that was removed in PR #17
+  #specifically for the immediate-feedback ADHD-friendly design goal, and
+  #debounce fixes the flash without giving that up.)
+  rawResults <- reactive({
 
     validate(
       need(input$alpha > .0001 && input$alpha < .9999,
@@ -50,6 +61,8 @@ shinyServer(function(input, output) {
 
 
   })
+
+  results <- debounce(rawResults, 500)
 
 
   output$interval <- renderText({
