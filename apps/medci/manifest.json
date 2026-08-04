@@ -1349,31 +1349,7 @@
   },
   "files": {
     ".Rprofile": {
-      "checksum": "1de4419606181c66b46ca89d1eab4960"
-    },
-    "legacy/changeserver.R": {
-      "checksum": "c8a5105920561282e814a2baa2030dcc"
-    },
-    "legacy/changeui.R": {
-      "checksum": "11c6d38eb004f449f8e5ef8fe7edc9dd"
-    },
-    "legacy/medci info.docx": {
-      "checksum": "36a1feca8c4aa1d3185889fec85eaaee"
-    },
-    "legacy/olds.R": {
-      "checksum": "86f2da1e16bb9d26937aad60b2cb1cf9"
-    },
-    "legacy/oldu.R": {
-      "checksum": "314e24b16a6acc03667ac79337e5a9ba"
-    },
-    "legacy/serverWebsiteCurrent.R": {
-      "checksum": "cc7d1eecfda43d6ddb5f1ce24b470400"
-    },
-    "legacy/uiWebsiteCurrent.R": {
-      "checksum": "23469f23d60e9168097594fadd3f358c"
-    },
-    "README.md": {
-      "checksum": "a7b9b0ba7263a98fe74648b578a8b2c5"
+      "checksum": "2907665cab9b530e3a0d13bee4f06b82"
     },
     "renv.lock": {
       "checksum": "0b16198da28726189a6bd0134c2cb1ae"
