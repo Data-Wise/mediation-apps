@@ -104,7 +104,8 @@ fluidPage(
   div(
     class = "mc-page",
 
-    titlePanel("Monte Carlo"),
+    titlePanel("Monte Carlo Confidence Intervals for Indirect Effects"),
+    helpText("Computes Monte Carlo and Asymptotic-Delta confidence intervals for an arbitrary nonlinear function of coefficient estimates — e.g. sequential indirect effects or contrasts of indirect effects in mediation models."),
 
     navset_tab(
       id = "mainTabs",
@@ -132,13 +133,25 @@ fluidPage(
           #landed where intended before running the computation.
           fluidRow(
             column(6, tableOutput("covmat")),
-            column(6, uiOutput("covmatSwatch"))
+            column(6,
+              checkboxInput("showSwatch", "Show color grid", value = FALSE),
+              uiOutput("covmatSwatch")
+            )
           ),
 
           textInput("quant", "Formula:", "b1*b2*b3*b4"),
           helpText("References the coefficients as b1, b2, ... Allowed: + - * / ^ ( ) and log()."),
 
-          numericInput("alpha", "Significance Level:", 0.05)
+          #Common presets, but still freely typeable (create = TRUE) --
+          #server.R validates whatever is typed is a number in (0, 1)
+          #exclusive, same bounds as the preset list itself spans.
+          selectizeInput(
+            "alpha", "Significance Level:",
+            choices = c("0.0001", "0.005", "0.01", "0.05", "0.1"),
+            selected = "0.05",
+            options = list(create = TRUE, createOnBlur = TRUE)
+          ),
+          helpText("Pick a common value or type your own (any number between 0 and 1, exclusive).")
         ),
 
         #Zone 2: Result.
