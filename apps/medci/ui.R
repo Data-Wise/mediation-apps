@@ -27,12 +27,6 @@ shinyUI(pageWithSidebar(
     ),
     
     
-    #Suppress error messages from R processes. (So that we can create our own popup errors)
-    tags$style(type="text/css",
-               ".shiny-output-error { visibility: hidden; }",
-               ".shiny-output-error:before { visibility: hidden; }"
-    ),
-    
     #Get rid of arrows on the side of input boxes.
     tags$style(type="text/css",
       "input[type=number]::-webkit-inner-spin-button, 
@@ -49,19 +43,6 @@ shinyUI(pageWithSidebar(
 
     #Create the box for the example equation in the helpText.
     tags$style(type='text/css', ".boxed {border: 1.5px solid black;}"),
-    
-    #Allow the use of MathJax within the ui.R file
-    tags$head( tags$script(src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full", type = 'text/javascript'),
-               tags$script( "MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});", type='text/x-mathjax-config')
-    ),
-    
-    
-    #Below used to allow MAthJax, then it suddenly stopped working. The above statement was then substituted.
-#     tags$head(
-#             
-#       tags$script(src = 'https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', type = 'text/javascript')
-#             
-#     ),
     
     
     #numericInput allows the user to enter a value. An error occurs when an intial value is not specified...For the mathematical notation, HTML was used. textOutput displays the entry error messages when nessecary.
@@ -99,7 +80,7 @@ shinyUI(pageWithSidebar(
 
 
 # tags$div(class = "boxed", HTML("<b>Example:</b> $$\\frac{\\hat{a}}{3}$$")),
-helpText(HTML("<p>If you have any questions/concerns regarding the RMediation package, please email me at <a href='mailto:dtofighi@psych.gatech.edu'>dtofighi@psych.gatech.edu</a>.</p>")
+helpText(HTML("<p>If you have any questions/concerns regarding the RMediation package, please email me at <a href='mailto:dtofighi@gmail.com'>dtofighi@gmail.com</a>.</p>")
 )),
     
 #   ),
