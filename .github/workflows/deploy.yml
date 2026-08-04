@@ -47,23 +47,23 @@ jobs:
           working-directory: apps/${{ matrix.app }}
 
       - name: Install rsconnect
+        working-directory: apps/${{ matrix.app }}
         run: Rscript -e "install.packages('rsconnect')"
 
       - name: Write manifest.json
-        env:
-          APP_DIR: apps/${{ matrix.app }}
-        run: Rscript -e "rsconnect::writeManifest(Sys.getenv('APP_DIR'))"
+        working-directory: apps/${{ matrix.app }}
+        run: Rscript -e "rsconnect::writeManifest('.')"
 
       - name: Deploy to Connect Cloud
+        working-directory: apps/${{ matrix.app }}
         env:
           CONNECT_API_KEY: ${{ secrets.CONNECT_API_KEY }}
           CONNECT_SERVER: ${{ secrets.CONNECT_SERVER }}
-          APP_DIR: apps/${{ matrix.app }}
         run: |
           Rscript -e '
             rsconnect::connectApiUser(
               server = Sys.getenv("CONNECT_SERVER"),
               apiKey = Sys.getenv("CONNECT_API_KEY")
             )
-            rsconnect::deployApp(appDir = Sys.getenv("APP_DIR"), forceUpdate = TRUE)
+            rsconnect::deployApp(appDir = ".", forceUpdate = TRUE)
           '
