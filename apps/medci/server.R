@@ -32,9 +32,17 @@ shinyServer(function(input, output) {
     #New results statement because version 1.1.4 of RMediation output for the medci function does not produce the indirect effect estimate and SE anymore. So this now calls these estimates from a 
     #different location than before. They are being calculated above rather than being pulled from output.
 
-    paste("For a&#770 = ", round(input$mu.x,digits=3), " (SE = ", round(input$se.x,digits=3), ")", " and b&#770 = ", round(input$mu.y,digits=3), " (SE = ", round(input$se.y,digits=3), "),", 
+    #Index by name, not position: medci(type="all") returns a list keyed
+    #by method name ("Distribution of Product", "Monte Carlo", "Asymptotic
+    #Normal"). The previous version used medValues[[2]], which is the
+    #Monte Carlo method's CI, not Distribution of Product's -- the label
+    #below and the numbers it displayed disagreed. Indexing by name also
+    #survives a future reordering of medci()'s return list.
+    dopCI <- medValues[["Distribution of Product"]][["95% CI"]]
+
+    paste("For a&#770 = ", round(input$mu.x,digits=3), " (SE = ", round(input$se.x,digits=3), ")", " and b&#770 = ", round(input$mu.y,digits=3), " (SE = ", round(input$se.y,digits=3), "),",
           " the indirect effect estimate is ", round(mu.xy,digits=3), " (SE = ", round(se.xy,digits=3), "). The distribution of the product of coefficients method ",
-          round((1-input$alpha)*100,digits=3),"% CI is ", "[", round(medValues[[2]][[1]],digits=3),", ",round(medValues[[2]][[2]],digits=3),"].",sep="")
+          round((1-input$alpha)*100,digits=3),"% CI is ", "[", round(dopCI[[1]],digits=3),", ",round(dopCI[[2]],digits=3),"].",sep="")
     
     
   })
