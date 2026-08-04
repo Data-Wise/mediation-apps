@@ -84,6 +84,21 @@ fluidPage(
       background: transparent;
       box-shadow: none;
     }
+
+    .mc-swatch-grid {
+      display: inline-block;
+      border-radius: 6px;
+      padding: 2px;
+    }
+    .mc-swatch-invalid {
+      outline: 2px solid #b3261e;
+      outline-offset: 2px;
+    }
+    .mc-swatch-warning {
+      color: #b3261e;
+      font-size: 0.8rem;
+      margin-top: 4px;
+    }
   ")),
 
   div(
@@ -109,6 +124,16 @@ fluidPage(
 
           textInput("Sigma", "Variance-Covariance Matrix:", "0.05,0,0,0,0.05,0,0,0.03,0,0.03"),
           helpText("Lower-triangle values, comma-separated: top of the left column downward, then each column thereafter."),
+
+          #Live sanity check: numeric table + color swatch grid, both sourced
+          #from parseSigma() and updating on every keystroke (not debounced)
+          #-- see server.R for why. Visible inline instead of buried in a
+          #collapsed footer accordion, so the user can confirm the values
+          #landed where intended before running the computation.
+          fluidRow(
+            column(6, tableOutput("covmat")),
+            column(6, uiOutput("covmatSwatch"))
+          ),
 
           textInput("quant", "Formula:", "b1*b2*b3*b4"),
           helpText("References the coefficients as b1, b2, ... Allowed: + - * / ^ ( ) and log()."),
@@ -145,10 +170,8 @@ fluidPage(
             open = FALSE,
             bslib::accordion_panel(
               "Submitted values (sanity check)",
-              fluidRow(
-                column(5, h6("Coefficient Estimates"), tableOutput("invals")),
-                column(7, h6("Variance-Covariance Matrix"), tableOutput("covmat"))
-              )
+              h6("Coefficient Estimates"),
+              tableOutput("invals")
             ),
             bslib::accordion_panel(
               "About this calculator",
