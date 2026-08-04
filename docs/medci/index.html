@@ -2,11 +2,137 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="refresh" content="0; url=https://connect.posit.cloud/data-wise/content/019fcd3d-73ad-0d98-38a2-2b138b42d03b">
-<title>Redirecting to MEDCI…</title>
-<link rel="canonical" href="https://connect.posit.cloud/data-wise/content/019fcd3d-73ad-0d98-38a2-2b138b42d03b">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MEDCI — mediation-apps</title>
+<script>
+  window.MathJax = { tex: { inlineMath: [['\\(', '\\)']] } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js" integrity="sha384-M5jmNxKC9EVnuqeMwRHvFuYUE8Hhp0TgBruj/GZRkYtiMrCRgH7yvv5KY+Owi7TW" crossorigin="anonymous" async></script>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: #f7f4ee;
+    color: #202a27;
+    margin: 0;
+    padding: 40px 16px;
+  }
+  .mc-page { max-width: 720px; margin: 0 auto; }
+  .mc-nav {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #616e69;
+    margin-bottom: 16px;
+  }
+  .mc-nav a { color: #616e69; text-decoration: none; }
+  .mc-nav a:hover { text-decoration: underline; }
+
+  .mc-header {
+    background: #ffffff;
+    border: 1px solid #e1d9c8;
+    border-left: 4px solid #2e6f63;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+  }
+  .mc-header h1 { font-size: 1.4rem; margin: 0 0 6px 0; }
+  .mc-header p { margin: 0; color: #616e69; font-size: 0.95rem; }
+
+  .mc-card {
+    background: #ffffff;
+    border: 1px solid #e1d9c8;
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+  }
+  .mc-card-head {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    color: #616e69;
+    margin-bottom: 10px;
+  }
+
+  .mc-example {
+    background: #f0f6f4;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 0.9rem;
+  }
+  .mc-example div { padding: 2px 0; }
+  .mc-example .result { color: #2e6f63; font-weight: 700; }
+
+  .mc-shot {
+    border: 1px dashed #c9c1ae;
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+    color: #94897a;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+  }
+
+  details.mc-card summary {
+    cursor: pointer;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    color: #616e69;
+  }
+  details.mc-card p { margin: 10px 0 0 0; font-size: 0.88rem; color: #4a534f; line-height: 1.5; }
+
+  .mc-launch-wrap { text-align: center; margin: 28px 0; }
+  .mc-launch {
+    display: inline-block;
+    background: #2e6f63;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 14px 36px;
+    border-radius: 8px;
+  }
+  .mc-launch:hover { background: #245a50; }
+</style>
 </head>
 <body>
-<p>Redirecting to <a href="https://connect.posit.cloud/data-wise/content/019fcd3d-73ad-0d98-38a2-2b138b42d03b">MEDCI</a>…</p>
+  <div class="mc-page">
+    <div class="mc-nav">
+      <a href="../">&larr; All apps</a>
+      <a href="../medmc/">Monte Carlo app &rarr;</a>
+    </div>
+
+    <div class="mc-header">
+      <h1>MEDCI</h1>
+      <p>Confidence intervals for a two-coefficient mediated effect (a&middot;b), via the distribution-of-the-product method.</p>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-card-head">Formula</div>
+      <p>Computes a confidence interval for the mediated effect \(\hat{a} \cdot \hat{b}\) — the product of two normal random variables — using the distribution of the product of coefficients method. Inputs: \(\hat{a}\), \(\hat{b}\), their standard errors \(SE_{\hat{a}}\), \(SE_{\hat{b}}\), significance level \(\alpha\), and the correlation \(\rho\) between \(\hat{a}\) and \(\hat{b}\).</p>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-card-head">Worked example</div>
+      <div class="mc-example">
+        <div>&acirc; = 0, b&#770; = 0, SE(&acirc;) = 1, SE(b&#770;) = 1, &alpha; = 0.05, &rho; = 0</div>
+        <div class="result">95% CI: [&minus;2.18, 2.18]</div>
+      </div>
+    </div>
+
+    <div class="mc-shot">App screenshot — coming soon</div>
+
+    <details class="mc-card">
+      <summary>Citation</summary>
+      <p>Tofighi, D., &amp; MacKinnon, D. P. (2011). RMediation: An R package for mediation analysis confidence intervals. <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3233842/pdf/nihms325903.pdf">[PDF]</a> <i>Behavior Research Methods, 43</i>, 692&ndash;700.</p>
+    </details>
+
+    <div class="mc-launch-wrap">
+      <a class="mc-launch" href="https://connect.posit.cloud/data-wise/content/019fcd3d-73ad-0d98-38a2-2b138b42d03b">Launch MEDCI &rarr;</a>
+    </div>
+  </div>
 </body>
 </html>
