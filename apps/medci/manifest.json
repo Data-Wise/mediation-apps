@@ -1501,9 +1501,6 @@
     }
   },
   "files": {
-    ".Rprofile": {
-      "checksum": "abd4e395314ddd7c027a6a469e6c76fe"
-    },
     "renv.lock": {
       "checksum": "24dc8e282c6228baf58bd9164b5f8d3f"
     },
