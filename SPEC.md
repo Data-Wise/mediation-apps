@@ -1,0 +1,92 @@
+# SPEC.md
+
+Spec-driven-development companion to
+[SPEC-shiny-apps-landing-page-2026-08-04.md](SPEC-shiny-apps-landing-page-2026-08-04.md)
+(the detailed build spec — this file is the 6-area summary format).
+
+## 1. Objective
+
+Give medci and medmc a single memorable "front door" URL, so users don't
+have to remember either app's long Posit Connect Cloud address. Target
+users: researchers/students using the mediation-apps ecosystem, plus the
+maintainer sharing links in papers/teaching materials.
+
+**Gate 0 first:** confirm Connect Cloud's own account dashboard doesn't
+already solve this for free before building anything (see the detailed
+SPEC's "Decision" section).
+
+## 2. Commands
+
+No build step — this is static HTML/CSS, no framework, no package manager.
+
+| Action | Command |
+|---|---|
+| Preview locally | Open `docs/index.html` directly in a browser |
+| Enable hosting | Repo Settings → Pages → source = `docs/` folder on `main` |
+| Regenerate app manifests (unrelated apps, unaffected by this work) | `Rscript -e 'rsconnect::writeManifest(".")'` inside `apps/<app>/` |
+
+## 3. Project structure
+
+```
+docs/
+├── index.html          # landing page: 2 launch cards (medci, medmc)
+├── medci/index.html     # meta-refresh redirect -> medci's Connect Cloud URL
+└── medmc/index.html     # meta-refresh redirect -> medmc's Connect Cloud URL
+```
+
+Existing `apps/medci/ui.R`, `apps/medmc/ui.R` get one addition each: a
+cross-link to the other app's URL in their "About" accordion panel. No
+other files in `apps/` change.
+
+## 4. Code style
+
+- Plain HTML + inline/embedded CSS. No JS framework — two links don't need
+  one.
+- Reuse the CSS tokens already shared and confirmed identical between
+  `apps/medci/ui.R` and `apps/medmc/ui.R` (see `DESIGN-STANDARDS.md` §2):
+  `#2e6f63` accent, `border-radius: 12px`, `box-shadow: 0 1px 2px
+  rgba(32,42,39,0.06), 0 6px 20px rgba(32,42,39,0.05)`. The landing page
+  should look like it belongs to the same product as the apps it links to,
+  not a generic directory listing.
+- ADHD-friendly layout: two large launch cards (icon, one-line description,
+  big button), no scrolling required, no wall of prose.
+
+## 5. Testing strategy
+
+No `shiny::testServer()` coverage applicable — static content, no
+server-side reactive logic touched.
+
+- Manual: visit the Pages URL, confirm both cards render and link to the
+  correct live Connect Cloud URLs.
+- Manual: visit each per-app redirect path, confirm it lands on the
+  correct app.
+- Manual smoke test (real risk, not optional): re-publish one existing app
+  (e.g. medci) on Connect Cloud after `docs/` exists in the tree, confirm
+  it still resolves to the same `ui.R` primary file — no accidental
+  re-selection prompt or broken deploy.
+- `parse("ui.R")` on `apps/medci/ui.R` / `apps/medmc/ui.R` after the
+  About-panel cross-link edit (static string change only).
+
+## 6. Boundaries
+
+**Always do without asking:**
+- Static file edits under `docs/`.
+- `parse()`-checking any `ui.R` touched.
+
+**Ask first:**
+- Enabling GitHub Pages in repo Settings (a repo configuration change,
+  not a code change).
+- Editing `apps/medci/ui.R` or `apps/medmc/ui.R` (live, deployed app code)
+  — even for the small About-panel cross-link, confirm before merging
+  given the smoke-test risk noted above.
+- Any change to repo visibility/plan (relevant if GitHub Pages
+  availability turns out to depend on it).
+
+**Never do:**
+- Touch medci/medmc's statistical/server-side logic as part of this work
+  — out of scope, unrelated to the front-door problem.
+- Introduce a build step, JS framework, or third-party hosting dependency
+  for what two static launch cards don't need.
+- Assume the Pages URL shape (trailing slash, `.io/repo` pattern) without
+  confirming once Pages is actually live — stated as fact in the detailed
+  SPEC's Phase 2, not to be shortcut here either.
