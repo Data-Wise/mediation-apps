@@ -72,7 +72,12 @@ flow, the correct auth is `rsconnect::connectCloudClientCredentials()`
 
 ## Testing
 
-- `e2e` tier via `shinytest2` (snapshot + interaction testing).
+- `e2e` tier via `shinytest2` (snapshot + interaction testing) — **not
+  yet implemented**. Verification so far (medci's deploy fixes and UI
+  quick/medium wins) has been ad hoc: `parse()`/`source()` to catch
+  syntax and tag-building errors, `shiny::testServer()` to exercise
+  `server.R`'s reactive/`validate()` logic directly. No snapshot tests
+  exist yet.
 - `dogfood` — click through the deployed app from a link in
   mediationverse's README/`ecosystem.qmd`.
 

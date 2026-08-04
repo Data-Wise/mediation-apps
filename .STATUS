@@ -1,12 +1,12 @@
 status: active
 priority: P3
-progress: 25
+progress: 60
 kind: apps
 cran_state: n/a
-next: Finish the Connect Cloud "Publish from GitHub" flow (browser UI) -- select Data-Wise/mediation-apps, apps/medci/ui.R as primary file. GitHub Actions deploy.yml removed (PRs #1-8): it called rsconnect::connectApiUser(apiKey=...), which only works for classic self-hosted Posit Connect -- connect.posit.cloud has no static API key at all, confirmed via rsconnect docs (connectCloudUser()/connectCloudClientCredentials() are the real auth paths for Connect Cloud). MEDMC migration still blocked separately -- RMediation::ci() API broke (old app called ci(M,S,QU,A) with raw numeric vectors; current ci() is an S7 generic on a fitted object) -- needs its own investigation, not a straight port.
-done: 2026-08-03 -- repo scaffolded; medci migrated from amplab.shinyapps.io/MEDCI (id 60898) via PR #1, review-fixed (mislabeled CI, dead MathJax, error-hiding CSS, stale email); manifest.json + .rscignore committed (PR #3/#4) for Connect Cloud's GitHub-connect flow, which reads it directly from the repo. GitHub Actions CI path (PRs #5-8) debugged through two real bugs (renv activation cwd, missing workflow_dispatch) before confirming the whole approach was wrong for this product -- removed.
+next: MEDMC migration is parked -- RMediation::ci() API broke (old app called ci(M,S,QU,A) with raw numeric vectors; current ci() is an S7 generic on a fitted object), needs its own investigation, not a straight port. medci UI enhancement items #9 (interactive plotly density plot) and #10 (bookmarkable state) are parked too -- both cross the golem escalation trigger (CLAUDE.md), bigger scope than the single-file quick/medium wins already shipped.
+done: 2026-08-04 -- medci is LIVE on Connect Cloud (connect.posit.cloud), verified working. Root cause of 3 failed deploy attempts: Connect Cloud's native GitHub-connect flow clones the raw repo tree directly (not an rsconnect bundle) and does not support renv at all -- a committed .Rprofile/renv/ ran renv::activate() at container start regardless of .rscignore, redirecting .libPaths() to an empty project library (PRs #11-16, see CLAUDE.md Structure section). Once fixed, shipped UI modernization in two rounds: quick wins #1-5 (PR #17/#18 -- fluidPage+bslib theme, live reactivity replacing submitButton, MathJax notation, validate()/need() error handling) and medium wins #6-8 (PR #19/#20 -- responsive plot width, paired a/b input columns, citation+about moved to collapsible accordions). Both verified locally before merge: ui.R evaluated via source(), server.R behavior via shiny::testServer (correct CI on valid input, correct validation error on bad input) -- ad hoc, not the shinytest2 tier CLAUDE.md's Testing section describes (that's still unimplemented).
 type: apps
-last_updated: 2026-08-03
+last_updated: 2026-08-04
 
 ## mediation-apps
 
