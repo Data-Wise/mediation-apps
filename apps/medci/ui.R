@@ -85,8 +85,13 @@ fluidPage(
                      class = "btn-sm btn-outline-secondary",
                      style = "position: absolute; top: 6px; right: 6px; z-index: 2;",
                      onclick = "navigator.clipboard.writeText(document.getElementById('interval').innerText); var b = document.getElementById('copyResults'); var t = b.innerHTML; b.innerHTML = 'Copied!'; setTimeout(function(){ b.innerHTML = t; }, 1200);"),
-        tags$pre(
-          style = "white-space: pre-wrap; padding: 12px 90px 12px 12px; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px;",
+        #A plain styled div, not tags$pre -- <pre> preserves whitespace
+        #literally, and Shiny's HTML generator inserts leading
+        #indentation/newlines around nested tags, which showed up as a
+        #visible indent on the first line under pre-wrap. A monospace div
+        #keeps the fenced look without whitespace-literal semantics.
+        div(
+          style = "font-family: monospace; padding: 12px 90px 12px 12px; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px;",
           htmlOutput("interval", inline = TRUE)
         )
       ),
