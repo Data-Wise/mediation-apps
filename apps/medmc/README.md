@@ -1,9 +1,9 @@
 # medmc
 
-Shiny frontend for Monte Carlo / Asymptotic-Delta confidence intervals
-of an arbitrary user-defined nonlinear function of coefficient
-estimates (e.g. sequential indirect effects, contrasts of indirect
-effects).
+"Monte Carlo Confidence Intervals for Indirect Effects" — Shiny
+frontend for Monte Carlo / Asymptotic-Delta confidence intervals of an
+arbitrary user-defined nonlinear function of coefficient estimates
+(e.g. sequential indirect effects, contrasts of indirect effects).
 
 Migrated from `amplab.shinyapps.io/MEDMC` (`server.R` dated 2/10/2014).
 
@@ -40,17 +40,36 @@ See `SPEC-medmc-migration-2026-08-04.md` (repo root) for the full
 design record, including the adversarial review that caught the
 point-estimate assumption before implementation.
 
-## Matrix sanity-check swatch
+## Matrix sanity-check
 
-Next to the Variance-Covariance Matrix input: a live color-coded grid
-(`output$covmatSwatch`, `renderUI` CSS grid, not a plot -- redraws
-cheaply on every keystroke) alongside the existing numeric table, both
-sourced from `parseSigma()`. Flags a non-positive-semi-definite matrix
+Next to the Variance-Covariance Matrix input: a numeric table
+(`output$covmat`) showing only the lower triangle + diagonal the user
+actually typed -- the mirrored upper-triangle cells `vechReverse()`
+fills in for matrix algebra are blanked in the display copy, not shown
+as redundant zeros. An optional color-coded grid (`output$covmatSwatch`,
+`renderUI` CSS grid, not a plot -- redraws cheaply on every keystroke)
+is available via a "Show color grid" checkbox (default off; it
+duplicated the table without adding much). Both are sourced from
+`parseSigma()`. The grid flags a non-positive-semi-definite matrix
 visually (via `eigen()`, magnitude-scaled tolerance) before it would
 otherwise only surface once `MASS::mvrnorm()` fails inside the debounced
-`results()`. Capped at 6 coefficients -- larger matrices fall back to
-the table alone. See `/Users/dt/.claude/plans/abstract-weaving-boot.md`
-for the design record (adversarially reviewed before implementation).
+`results()`, and is capped at 6 coefficients -- larger matrices fall
+back to the table alone. See
+`/Users/dt/.claude/plans/abstract-weaving-boot.md` for the design record
+(adversarially reviewed before implementation).
+
+## Significance Level input
+
+A `selectizeInput` with common presets (`.0001`, `.005`, `.01`, `.05`,
+`.1`) plus free typing (`create = TRUE`) for any other value. Validated
+server-side against the open interval (0, 1) exclusive. Replaced the
+original `numericInput` because its spin-arrow widget didn't match how
+the field is actually used (typed directly, not incremented). Restructuring
+this also surfaced and fixed a latent bug: `output$interval` was reading
+`input$alpha` directly in addition to the debounced `results()` -- the
+same mixed-dependency class documented in medci's `drawPlot()` history
+(PR #27). `alpha` is now parsed once inside `rawResults()` and carried
+through its return list.
 
 ## Security
 
