@@ -5,6 +5,12 @@ ecosystem (`medfit`, `probmed`, `RMediation`, `medrobust`, `medsim`).
 
 Deployed to [Posit Connect Cloud](https://docs.posit.co/connect-cloud/).
 
+## Live apps
+
+**[connect.posit.cloud/data-wise](https://connect.posit.cloud/data-wise)** —
+one URL, lists both apps (medci, medmc), no need to remember either app's
+individual long URL.
+
 ## Structure
 
 Each app lives in its own subdirectory under `apps/`, fully self-contained

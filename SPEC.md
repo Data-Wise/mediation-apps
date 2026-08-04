@@ -11,9 +11,10 @@ have to remember either app's long Posit Connect Cloud address. Target
 users: researchers/students using the mediation-apps ecosystem, plus the
 maintainer sharing links in papers/teaching materials.
 
-**Gate 0 first:** confirm Connect Cloud's own account dashboard doesn't
-already solve this for free before building anything (see the detailed
-SPEC's "Decision" section).
+**Gate 0 resolved 2026-08-04:** `connect.posit.cloud/data-wise` already
+lists both apps publicly, no login required. Added to `README.md`. The
+rest of this spec (GitHub Pages build) is now optional polish, not a
+requirement.
 
 ## 2. Commands
 
