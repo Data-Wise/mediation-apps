@@ -1186,10 +1186,10 @@
   },
   "files": {
     "server.R": {
-      "checksum": "2e08b0ce668d83b0f2c60a2a4b70981a"
+      "checksum": "16abdd7a2881b0d323a682026fe631bc"
     },
     "ui.R": {
-      "checksum": "c1302d7e31aff4781d7ae12399bf2cbf"
+      "checksum": "435e90f2c2b87d0a95830f93b9825da1"
     },
     "www/SE.png": {
       "checksum": "eb1198479011efc72904f0f4561dd0d2"
