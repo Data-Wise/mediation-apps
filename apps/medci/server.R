@@ -57,15 +57,33 @@ shinyServer(function(input, output) {
   })
 
 
+  #Draws the density/CI plot to whatever graphics device is currently
+  #open -- shared by the on-screen renderPlot() and the PNG downloadHandler
+  #below so both stay in sync with a single implementation.
+  drawPlot <- function() {
+    results()
+    medci(input$mu.x,input$mu.y,input$se.x,input$se.y,input$rho, input$alpha, plot=TRUE, plotCI=TRUE)
+  }
 
   #Specify that we want the plot produced by medci to be shown in the user interface.
   #Reactive validation (alpha/rho/SE bounds) already runs via results(); we
   #depend on it here so the plot clears together with the results text
   #instead of throwing its own separate error.
   output$plot <- renderPlot({
-    results()
-
-    medci(input$mu.x,input$mu.y,input$se.x,input$se.y,input$rho, input$alpha, plot=TRUE, plotCI=TRUE)
+    drawPlot()
   })
+
+  #Explicit "save figure" control (right-click-to-save also works on the
+  #rendered image, but not every user knows that).
+  output$downloadPlot <- downloadHandler(
+    filename = function() {
+      sprintf("medci-plot-%s.png", format(Sys.time(), "%Y%m%d-%H%M%S"))
+    },
+    content = function(file) {
+      png(file, width = 600, height = 425)
+      drawPlot()
+      dev.off()
+    }
+  )
 
 })
