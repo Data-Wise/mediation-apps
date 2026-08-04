@@ -9,6 +9,12 @@ on:
     branches: [main]
     paths:
       - 'apps/**'
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'App directory name to deploy (e.g. medci)'
+        required: true
+        type: string
 
 jobs:
   detect-changed-apps:
@@ -21,8 +27,14 @@ jobs:
           fetch-depth: 2
       - name: Detect changed app subdirectories
         id: filter
+        env:
+          DISPATCH_APP: ${{ github.event.inputs.app }}
         run: |
-          changed=$(git diff --name-only HEAD^ HEAD -- apps/ | cut -d/ -f2 | sort -u | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            changed=$(jq -c -n --arg app "$DISPATCH_APP" '[$app]')
+          else
+            changed=$(git diff --name-only HEAD^ HEAD -- apps/ | cut -d/ -f2 | sort -u | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          fi
           echo "changes=$changed" >> "$GITHUB_OUTPUT"
 
   deploy:
