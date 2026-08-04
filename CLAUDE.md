@@ -10,7 +10,9 @@ Each app is a self-contained subdirectory under `apps/`:
 apps/<app-name>/
 ├── app.R
 ├── renv.lock       # always — per-app dependency pin
-├── manifest.json   # generated via rsconnect::writeManifest() in CI, never hand-edited
+├── manifest.json   # generated locally via rsconnect::writeManifest(), committed
+│                    # (Connect Cloud's GitHub-connect flow reads this from the repo
+│                    # directly — it does not invoke R itself)
 └── README.md
 ```
 
@@ -33,12 +35,22 @@ When an app escalates to a golem package:
 
 ## Deploy
 
-- CI is path-filtered — only the app subdirectory that changed redeploys.
-- Deploy credential (`CONNECT_API_KEY`) is a per-repo GitHub Actions
-  secret, not shared across repos.
-- CI regenerates `manifest.json` via `rsconnect::writeManifest()` before
-  every deploy — it is Connect's environment blueprint and must never be
-  hand-edited or committed stale.
+**Native GitHub-connect publish, not a GitHub Actions workflow.** Connect
+Cloud (`connect.posit.cloud`) is a different product from classic
+self-hosted Posit Connect and does not expose a static API key in its UI —
+`rsconnect::connectApiUser(apiKey = ...)` is for classic Connect only and
+does not work here. (A GitHub Actions `deploy.yml` built around it existed
+briefly in this repo's history and was removed after confirming this.)
+
+Instead: Connect Cloud → Publish → From GitHub → select this repo → pick
+the app's `ui.R` (or `app.R`) as the primary file → auto-republish on push
+is on by default. Each app needs `manifest.json` committed (see Structure
+above) since Connect Cloud reads it straight from the repo tree.
+
+If a future app genuinely needs CI-driven deploy instead of the native
+flow, the correct auth is `rsconnect::connectCloudClientCredentials()`
+(OAuth `client_credentials`, a Connect Cloud service-account
+`clientId`/`clientSecret`) — not `connectApiUser()`.
 
 ## Security
 
