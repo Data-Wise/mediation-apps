@@ -19,6 +19,17 @@ shinyServer(function(input, output) {
   #Shiny's standard inline-error style near the output that depends on them,
   #replacing the old four separate ...Messages textOutputs + red CSS.
   #
+  #Returns a list (not just the text) that includes the raw input values
+  #alongside the computed text -- output$plot reads mu.x/mu.y/se.x/se.y/
+  #rho/alpha from THIS list, not from input$... directly. That's load-
+  #bearing: Shiny subscribes an output to every reactive value it reads
+  #during evaluation, not just the first one, so if drawPlot() touched
+  #input$... directly it would depend on both the debounced `results()`
+  #AND the raw undebounced inputs -- reintroducing the exact per-keystroke
+  #flash the debounce below was written to eliminate. (Caught in review:
+  #the first debounce fix, PR #27, had exactly this bug -- drawPlot()
+  #called results() but then read input$... itself.)
+  #
   #Debounced (500ms) below via `results <- debounce(rawResults, 500)`: with
   #live reactivity and no submit button, every keystroke re-triggers this
   #-- typing "0.1" digit-by-digit, or briefly clearing a field, hit a
@@ -42,46 +53,51 @@ shinyServer(function(input, output) {
            "Error: Standard Error must be a positive value")
     )
 
-    #Create a variable to represent the medci function output from the user's input values.
-    medValues <- medci(input$mu.x,input$mu.y,input$se.x,input$se.y,input$rho,input$alpha,type="all")
+    mu.x <- input$mu.x; mu.y <- input$mu.y
+    se.x <- input$se.x; se.y <- input$se.y
+    rho <- input$rho; alpha <- input$alpha
+
+    #type="dop" (Distribution of Product) is the default and the ONLY
+    #method this app displays -- type="all" (the previous call) also
+    #computed a 100,000-draw Monte Carlo estimate and an Asymptotic
+    #Normal estimate every time this reactive fires, neither ever used.
+    #type="dop" returns a flat list ($`95% CI`, $Estimate, $SE) rather
+    #than nested under a method name, since there's only one method.
+    medValues <- medci(mu.x, mu.y, se.x, se.y, rho, alpha, type = "dop")
 
     #Set up variables to easily represent the mu and SE estimates
-    se.xy <- sqrt(input$se.y^2*input$mu.x^2+input$se.x^2*input$mu.y^2+2*input$mu.x*input$mu.y*input$rho*input$se.x*input$se.y+input$se.x^2*input$se.y^2+input$se.x^2*input$se.y^2*input$rho^2);
-    mu.xy <- input$mu.x*input$mu.y+input$rho*input$se.x*input$se.y
+    se.xy <- sqrt(se.y^2*mu.x^2+se.x^2*mu.y^2+2*mu.x*mu.y*rho*se.x*se.y+se.x^2*se.y^2+se.x^2*se.y^2*rho^2)
+    mu.xy <- mu.x*mu.y+rho*se.x*se.y
 
-    #Index by name, not position: medci(type="all") returns a list keyed
-    #by method name ("Distribution of Product", "Monte Carlo", "Asymptotic
-    #Normal"). Indexing by name survives a future reordering of medci()'s
-    #return list.
-    dopCI <- medValues[["Distribution of Product"]][["95% CI"]]
+    dopCI <- medValues[["95% CI"]]
 
-    paste("For a&#770 = ", round(input$mu.x,digits=3), " (SE = ", round(input$se.x,digits=3), ")", " and b&#770 = ", round(input$mu.y,digits=3), " (SE = ", round(input$se.y,digits=3), "),",
+    text <- paste("For a&#770 = ", round(mu.x,digits=3), " (SE = ", round(se.x,digits=3), ")", " and b&#770 = ", round(mu.y,digits=3), " (SE = ", round(se.y,digits=3), "),",
           " the indirect effect estimate is ", round(mu.xy,digits=3), " (SE = ", round(se.xy,digits=3), "). The distribution of the product of coefficients method ",
-          round((1-input$alpha)*100,digits=3),"% CI is ", "[", round(dopCI[[1]],digits=3),", ",round(dopCI[[2]],digits=3),"].",sep="")
+          round((1-alpha)*100,digits=3),"% CI is ", "[", round(dopCI[[1]],digits=3),", ",round(dopCI[[2]],digits=3),"].",sep="")
 
-
+    list(text = text, mu.x = mu.x, mu.y = mu.y, se.x = se.x, se.y = se.y, rho = rho, alpha = alpha)
   })
 
   results <- debounce(rawResults, 500)
 
 
   output$interval <- renderText({
-    print(head(results()),quote=FALSE)
+    print(head(results()$text),quote=FALSE)
   })
 
 
   #Draws the density/CI plot to whatever graphics device is currently
   #open -- shared by the on-screen renderPlot() and the PNG downloadHandler
-  #below so both stay in sync with a single implementation.
+  #below so both stay in sync with a single implementation. Reads its
+  #parameters from results() (debounced), never from input$... directly
+  #-- see the comment on rawResults above for why that distinction
+  #matters.
   drawPlot <- function() {
-    results()
-    medci(input$mu.x,input$mu.y,input$se.x,input$se.y,input$rho, input$alpha, plot=TRUE, plotCI=TRUE)
+    r <- results()
+    medci(r$mu.x, r$mu.y, r$se.x, r$se.y, r$rho, r$alpha, plot=TRUE, plotCI=TRUE)
   }
 
   #Specify that we want the plot produced by medci to be shown in the user interface.
-  #Reactive validation (alpha/rho/SE bounds) already runs via results(); we
-  #depend on it here so the plot clears together with the results text
-  #instead of throwing its own separate error.
   output$plot <- renderPlot({
     drawPlot()
   })
