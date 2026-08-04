@@ -186,7 +186,8 @@ fluidPage(
 <p>To compute the confidence interval for the mediated effect, \\(\\hat{a} \\cdot \\hat{b}\\), using the distribution of the product of the coefficients method, input the following values into the boxes
                     above: the coefficient estimate (\\(\\hat{a}\\)), the coefficient estimate (\\(\\hat{b}\\)), the standard error of \\(\\hat{a}\\) (\\(SE_{\\hat{a}}\\)), the standard error of \\(\\hat{b}\\) (\\(SE_{\\hat{b}}\\)), the significance level for
                     the confidence interval (\\(\\alpha\\)), and the correlation between \\(\\hat{a}\\) and \\(\\hat{b}\\) (\\(\\rho\\)).</p>")),
-          helpText(HTML("<p>If you have any questions/concerns regarding the RMediation package, please email me at <a href='mailto:dtofighi@gmail.com'>dtofighi@gmail.com</a>.</p>"))
+          helpText(HTML("<p>If you have any questions/concerns regarding the RMediation package, please email me at <a href='mailto:dtofighi@gmail.com'>dtofighi@gmail.com</a>.</p>")),
+          helpText(HTML("<p>Need Monte Carlo / Asymptotic-Delta CIs for an arbitrary formula instead? <a href='https://data-wise.github.io/mediation-apps/medmc/' target='_blank' rel='noopener'>Try the Monte Carlo app</a>.</p>"))
         ),
         bslib::accordion_panel(
           "SE formula (\\(\\rho = 0\\))",

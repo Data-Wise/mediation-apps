@@ -191,7 +191,8 @@ fluidPage(
               helpText(HTML("<p>This web application computes Monte Carlo and Asymptotic-Delta confidence intervals for a nonlinear function of coefficient estimates and indirect effects.</p>
                     <p><b>Coefficient Estimates</b> — in the order they appear in the formula, separated by commas.</p>
                     <p><b>Variance-Covariance Matrix</b> — the lower triangle, separated by commas: top of the left column downward, then each column thereafter.</p>
-                    <p><b>Formula</b> — references the coefficients as b1, b2, ... Allowed: <i>+</i>, <i>-</i>, <i>*</i>, <i>/</i>, <i>^</i>, and <i>log( )</i>.</p>"))
+                    <p><b>Formula</b> — references the coefficients as b1, b2, ... Allowed: <i>+</i>, <i>-</i>, <i>*</i>, <i>/</i>, <i>^</i>, and <i>log( )</i>.</p>
+                    <p>Need a CI for a simple two-coefficient mediated effect instead? <a href='https://data-wise.github.io/mediation-apps/medci/' target='_blank' rel='noopener'>Try the MEDCI app</a>.</p>"))
             )
           )
         )
