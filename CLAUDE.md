@@ -9,12 +9,23 @@ Each app is a self-contained subdirectory under `apps/`:
 ```
 apps/<app-name>/
 ├── app.R
-├── renv.lock       # always — per-app dependency pin
 ├── manifest.json   # generated locally via rsconnect::writeManifest(), committed
 │                    # (Connect Cloud's GitHub-connect flow reads this from the repo
 │                    # directly — it does not invoke R itself)
 └── README.md
 ```
+
+**No `renv`.** Connect Cloud does not support renv for environment setup —
+it provisions packages purely from `manifest.json`
+(docs.posit.co/connect-cloud/how-to/r/dependencies.html). Its native
+GitHub-connect flow clones the raw repo tree directly (not an
+`rsconnect`-built bundle), so a committed `.Rprofile`/`renv/` still runs
+at container startup even if `.rscignore`'d — `renv::activate()`
+redirects `.libPaths()` to a project renv library Connect Cloud never
+populates, and every package looks `(none)` at runtime regardless of
+what's actually pinned. Generate `manifest.json` from a plain (non-renv)
+R library with the app's packages installed globally:
+`rsconnect::writeManifest(".")`.
 
 ## Escalation trigger
 
