@@ -7,6 +7,9 @@ effects).
 
 Migrated from `amplab.shinyapps.io/MEDMC` (`server.R` dated 2/10/2014).
 
+Live on Posit Connect Cloud (connect.posit.cloud), verified working as
+of 2026-08-04.
+
 ## Status
 
 Not a straight port. The original called
