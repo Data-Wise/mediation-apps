@@ -1,6 +1,12 @@
 # SPEC: A "front door" landing page for medci/medmc
 
-Status: draft — not yet implemented. Folds in
+Status: **Gate 0 resolved 2026-08-04 — `connect.posit.cloud/data-wise` already
+lists both apps publicly, no login wall.** Added to `README.md`. Phases 1-3
+(GitHub Pages build) are now optional polish, not required — pursue only if
+the nicer branded launch-card visual is wanted for papers/teaching, not to
+solve the core "long URL" problem, which Gate 0 already solves.
+
+Folds in
 [BRAINSTORM-shiny-apps-landing-page-2026-08-04.md](BRAINSTORM-shiny-apps-landing-page-2026-08-04.md)
 (adversarially reviewed) into a concrete build spec.
 
