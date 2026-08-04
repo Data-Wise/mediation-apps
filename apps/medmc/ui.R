@@ -94,6 +94,19 @@ fluidPage(
       outline: 2px solid #b3261e;
       outline-offset: 2px;
     }
+    /* Significance Level is typed directly (e.g. .05, .01) -- the
+       increment/decrement spinner arrows invite clicking through tiny
+       0.001-ish steps to a specific value, which isn't how this field is
+       actually used. Hide them; typing still works normally. */
+    #alpha::-webkit-outer-spin-button,
+    #alpha::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    #alpha[type='number'] {
+      -moz-appearance: textfield;
+    }
+
     .mc-swatch-warning {
       color: #b3261e;
       font-size: 0.8rem;
