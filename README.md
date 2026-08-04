@@ -7,9 +7,17 @@ Deployed to [Posit Connect Cloud](https://docs.posit.co/connect-cloud/).
 
 ## Live apps
 
-**[connect.posit.cloud/data-wise](https://connect.posit.cloud/data-wise)** —
-one URL, lists both apps (medci, medmc), no need to remember either app's
-individual long URL.
+**[data-wise.github.io/mediation-apps](https://data-wise.github.io/mediation-apps/)**
+— branded launch cards for both apps.
+
+[![Launch MEDCI](https://img.shields.io/badge/%E2%96%B6-Launch%20MEDCI-2e6f63)](https://data-wise.github.io/mediation-apps/medci/)
+[![Launch Monte Carlo](https://img.shields.io/badge/%E2%96%B6-Launch%20Monte%20Carlo-2e6f63)](https://data-wise.github.io/mediation-apps/medmc/)
+
+Fallback / reference: [connect.posit.cloud/data-wise](https://connect.posit.cloud/data-wise)
+lists both apps directly on Connect Cloud's own account page (this is what
+[Gate 0](SPEC-shiny-apps-landing-page-2026-08-04.md) confirmed already
+solves the core "long URL" problem for free — the GitHub Pages page above
+is the nicer branded version for papers/teaching).
 
 ## Structure
 
